@@ -2,27 +2,36 @@
 #include <SFML/Window.hpp>
 
 #include <iostream>
+#include "Editor.hpp"
 
-int main()
-{
+int main(){
+  
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "./gaem", sf::Style::Close);
 
-	sf::RenderWindow window(sf::VideoMode(800,600), "Gaem");
+    while(window.isOpen()){
 
-	while (window.isOpen())
-	{
+        sf::Event event; 
+        while(window.pollEvent(event)){
+            switch (event.type){
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+                case sf::Event::KeyPressed:
+                    if (event.key.code == sf::Keyboard::Escape) {
+                        window.close();
+                    }
+                    if (event.key.code == sf::Keyboard::E) {
+                        Editor editor(&window);
+                        editor.run();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }  
+        
+        window->clear(sf::Color(255,251,239));
 
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
-
-		window.clear();
-
-		window.display();
-
-	}
-
-	return 0;
+        window->display();
+    }
 }
