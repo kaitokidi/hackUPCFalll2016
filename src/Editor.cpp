@@ -35,8 +35,8 @@ void Editor::run(){
                 mouse_y = sf::Mouse::getPosition(*window).y;
                 
                 sf::CircleShape auxCircle (50, 50);
-                auxCircle.setCenter(25,25);
-                auxCircle.setColor(sf::Color(0,0,0));
+                auxCircle.setOrigin(25,25);
+                auxCircle.setFillColor(sf::Color(0,0,0));
                 auxCircle.setPosition(mouse_x, mouse_y);
                 circles.push_back(auxCircle);
             }
