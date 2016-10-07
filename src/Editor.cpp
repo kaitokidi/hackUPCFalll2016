@@ -35,6 +35,8 @@ void Editor::run(){
                 mouse_y = sf::Mouse::getPosition(*window).y;
                 
                 sf::CircleShape auxCircle (50, 50);
+                auxCircle.setCenter(25,25);
+                auxCircle.setColor(sf::Color(0,0,0));
                 auxCircle.setPosition(mouse_x, mouse_y);
                 circles.push_back(auxCircle);
             }
@@ -43,7 +45,7 @@ void Editor::run(){
             mousePressed = false;
         }
         
-        window->clear();
+        window->clear(sf::Color(255,251,239));
 
         for(size_t i = 0; i < circles.size(); ++i){
             window->draw(circles[i]);

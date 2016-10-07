@@ -28,6 +28,10 @@ int main(){
                 default:
                     break;
             }
-        }   
+        }  
+        
+        window->clear(sf::Color(255,251,239));
+
+        window->display();
     }
 }
