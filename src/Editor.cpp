@@ -1,6 +1,47 @@
 #include "Editor.hpp"
 #include <cmath>
 
+/*
+ Readme how to use it
+ 
+ from the game press E to go to the editor.
+ 
+ once in the editor
+     
+ if you click C + W
+     Writtemode command
+     you enter in writte mode, you can now writte the number of the level tah you want it saved into.
+     press C + W again when you are done to exit this mode.
+     You can see the current name in red in the top left corner.
+     if you exit and enter writte mode the name will be reseted to level.
+     
+ if you click C + T
+     TypeChange command
+     you will change the type of the brush (you will create items from the next type) 
+     You can see the type displayed in green in the top left corner.
+     
+ if you click C + S
+     Save command
+     you will save the file with the name written on writte mode. 
+     If no name is given it will be saved in a file named level.
+     This levels will be written on ../lvls/nameOfTheLevel
+     
+ if you click C + U 
+     Undo command
+     the last element added will be deleted.
+ 
+ if you are in type == 0
+     you will draw basic pins.
+     click the left mouse button on the place you want it to be placed. 
+     after releasing it, move the mouse in the direction you want the pin to face.
+     
+ if you are in type == 1
+     you will draw double pins.
+     Same as the basic pins (type == 0).
+     Then click on the direction you want the second spike.
+     
+ */
+
 Editor::Editor(sf::RenderWindow* pwindow){
     window = pwindow;
     mousePressed = false;
@@ -49,8 +90,11 @@ void Editor::run(){
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && event.key.code == sf::Keyboard::U) {
                         if(!mousePressed){
                             if(circles.size() > 0){
+                                int type = types[types.size()-1];
+                                types.pop_back();
                                 circles.pop_back();
                                 littleCircle.pop_back();
+                                if(type == 1) littleCircle.pop_back();
                             }
                         }
                     }
@@ -61,7 +105,9 @@ void Editor::run(){
                         
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && event.key.code == sf::Keyboard::S) {
+                        
                         std::ofstream aux("../lvls/"+text.getString());
+                        text.setString("Saved as -> " + text.getString() );
                         if(aux.is_open()){
                             size_t littleCircleindex = 0;
                             for(size_t i = 0; i < circles.size() && littleCircleindex < littleCircle.size(); ++i){
@@ -82,7 +128,6 @@ void Editor::run(){
                         }
                     }
                     case sf::Event::TextEntered:
-                        // Handle ASCII characters only
                         if (textActive && event.text.unicode < 58 && event.text.unicode > 47 && event.text.unicode != 119 && event.text.unicode != 87)
                         {
                             std::string str = text.getString();
@@ -98,7 +143,7 @@ void Editor::run(){
         float mouse_x, mouse_y;
         mouse_x = sf::Mouse::getPosition(*window).x; 
         mouse_y = sf::Mouse::getPosition(*window).y;
-                        std::cout << "newitera" << std::endl;
+                        //std::cout << "newitera" << std::endl;
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
             if(!mousePressed){
                 mousePressed = true;
@@ -127,14 +172,14 @@ void Editor::run(){
                     littleCircle.push_back(auxCircle);
                     
                     state = "iddle";
-                                    std::cout << "butpress ready for secondclick" << std::endl;
+                                    //std::cout << "butpress ready for secondclick" << std::endl;
                 }
             }
         }
         else { 
             mousePressed = false;
             if( (brushType == 0 || brushType == 1) && state == "mouseClicked"){
-                std::cout << "else mousepressed" << std::endl;
+                //std::cout << "else mousepressed" << std::endl;
                 sf::CircleShape auxCircle(2, 20);
                 auxCircle.setOrigin(2,2);
                 auxCircle.setFillColor(sf::Color(255,0,0));
@@ -155,7 +200,12 @@ void Editor::run(){
         
         window->clear(sf::Color(255,251,239));
         int littleCircleindex = 0;
-        std::cout << "drawing" << std::endl;
+        //std::cout << "drawing" << std::endl;
+        
+        if(littleCircle.size() <= 0){
+            for(size_t i = 0; i < circles.size(); ++i) window->draw(circles[i]);
+        }
+        
         for(size_t i = 0; i < circles.size() && littleCircleindex < littleCircle.size(); ++i){
             
             window->draw(circles[i]);
@@ -194,7 +244,7 @@ void Editor::run(){
         window->draw(auxCircle);
         
         window->display();
-                std::cout << "--" << std::endl;
+               //std::cout << "--" << std::endl;
     }
     
 }
