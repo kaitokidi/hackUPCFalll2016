@@ -11,7 +11,7 @@ sf::RenderTexture raios;
 sf::Texture pajaritoTextrure;
 
 
-void GaemRenderer__Render(GaemData* data, sf::RenderWindow* window) 
+void GaemRenderer__Render(GaemData* data, sf::RenderWindow* window)
 {
 static sf::Shader* txader = NULL;
     static sf::Clock clk;
@@ -27,15 +27,15 @@ static sf::Shader* txader = NULL;
   pajarito.setTexture(pajaritoTextrure, true);
   pajarito.setOrigin(sf::Vector2f(pajaritoTextrure.getSize()/2u));
   // Legasida
-  
-  for (int i = 0; i <= ID__Pajarito; ++i) 
+
+  for (int i = 0; i <= ID__Pajarito; ++i)
   {
     // sf::CircleShape shape;
     sf::Vector2f circlePos(data->pajaritos.x[i], data->pajaritos.y[i]);
     pajarito.setPosition(circlePos);
     sf::Color color = (data->pajaritos.toqueteable[i] ? sf::Color::Blue : sf::Color::Red);
     pajarito.setColor(color);
-    for (int j = 0; j <= data->pajaritos.p[i]; ++j) 
+    for (int j = 0; j <= data->pajaritos.p[i]; ++j)
     {
       float deltaX = data->pajaritos.vx[i][j];
       float deltaY = data->pajaritos.vy[i][j];
@@ -43,13 +43,14 @@ static sf::Shader* txader = NULL;
       pajarito.setRotation(angle + 90);
         txader->setParameter("pos", circlePos);
         txader->setParameter("istouch", data->pajaritos.toqueteable[i]);
+        txader->setParameter("fade", data->fade);
       window->draw(pajarito, txader);
     }
   }
 
     sf::Vector2f pos(
-            float(data->pajaritos.x[0]) / window->getSize().x, 
-            float(data->pajaritos.y[0]) / window->getSize().y 
+            float(data->pajaritos.x[0]) / window->getSize().x,
+            float(data->pajaritos.y[0]) / window->getSize().y
             );
 //    for (int i = 0; i < ID__Pajarito; ++i)
     {
@@ -59,14 +60,14 @@ static sf::Shader* txader = NULL;
     sf::Sprite spr;
   window->draw(spr, txader);
 */
-  
+
   raios.clear(sf::Color::Transparent);
 
-  for (int i = 0; i <= ID__Raio; ++i) 
+  for (int i = 0; i <= ID__Raio; ++i)
   {
     sf::Vector2i ini(data->raios.x[i], data->raios.y[i]);
     sf::Vector2i dest = ini + sf::Vector2i(getIncremento(data, i, data->raios.timerms[i]));
-    sf::Vertex line[] = 
+    sf::Vertex line[] =
     {
       sf::Vertex(sf::Vector2f(ini)),
       sf::Vertex(sf::Vector2f(dest))
@@ -82,9 +83,9 @@ static sf::Shader* txader = NULL;
   sf::Sprite raiosConjuntos;
   raiosConjuntos.setTexture(raios.getTexture());
 
-  window->draw(raiosConjuntos, txader);
+  window->draw(raiosConjuntos);
 
-  
+
   // new Shit
 
 }
