@@ -19,7 +19,8 @@ private:
     bool readyForSecondClick;
     bool mousePressed; 
     bool textActive;
-
+    bool visibility;
+    
     std::string state;
     
     int brushType;
@@ -27,6 +28,8 @@ private:
 
     sf::Text text;
     sf::Text textType;
+    sf::Text textVisibility;
+    
     sf::Font font;
     sf::RenderWindow* window;
 

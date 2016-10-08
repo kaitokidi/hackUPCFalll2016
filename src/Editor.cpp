@@ -55,13 +55,23 @@ Editor::Editor(sf::RenderWindow* pwindow){
     
     textType.setFont(font);
     textType.setCharacterSize(24); 
-    textType.setColor(sf::Color::Green);
+    textType.setColor(sf::Color(0,255,0));
     textType.setStyle(sf::Text::Bold | sf::Text::Underlined);
     textType.setPosition(0,30);
     textType.setString("0");
+
+    textVisibility.setFont(font);
+    textVisibility.setCharacterSize(24); 
+    textVisibility.setColor(sf::Color(0,0,255));
+    textVisibility.setStyle(sf::Text::Bold | sf::Text::Underlined);
+    textVisibility.setPosition(0,60);    
+    textVisibility.setString("1");
+    
     readyForSecondClick = false;
     
     state = "iddle";
+    
+    visibility = true;
 }
     
 void Editor::run(){
@@ -104,6 +114,10 @@ void Editor::run(){
                         textType.setString(std::to_string(brushType));
                         
                     }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && event.key.code == sf::Keyboard::V) {
+                        visibility = !visibility;
+                        textVisibility.setString(std::to_string(visibility));
+                    }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && event.key.code == sf::Keyboard::S) {
                         
                         std::ofstream aux("../lvls/"+text.getString());
@@ -115,11 +129,11 @@ void Editor::run(){
                                 auto c = circles[i];
                                 auto lc = littleCircle[littleCircleindex];
                                 int type = types[i];
-                                if(type == 0) aux << type << " " << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << '\n';
+                                if(type == 0) aux << type << " " << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << " " << visible << '\n';
                                 if(type == 1) {
                                     ++littleCircleindex;
                                     auto lc2 = littleCircle[littleCircleindex];
-                                    aux << type << " " << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << " " << std::floor(lc2.getPosition().x - c.getPosition().x) << " " << std::floor(lc2.getPosition().y - c.getPosition().y) << '\n';
+                                    aux << type << " " << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << " " << std::floor(lc2.getPosition().x - c.getPosition().x) << " " << std::floor(lc2.getPosition().y - c.getPosition().y) << " " << visible << '\n';
                                 }
                                 
                                 littleCircleindex++;
@@ -172,14 +186,12 @@ void Editor::run(){
                     littleCircle.push_back(auxCircle);
                     
                     state = "iddle";
-                                    //std::cout << "butpress ready for secondclick" << std::endl;
                 }
             }
         }
         else { 
             mousePressed = false;
             if( (brushType == 0 || brushType == 1) && state == "mouseClicked"){
-                //std::cout << "else mousepressed" << std::endl;
                 sf::CircleShape auxCircle(2, 20);
                 auxCircle.setOrigin(2,2);
                 auxCircle.setFillColor(sf::Color(255,0,0));
@@ -237,6 +249,7 @@ void Editor::run(){
         
         window->draw(text);
         window->draw(textType);
+        window->draw(textVisibility);
         sf::CircleShape auxCircle(40, 79);
         auxCircle.setOrigin(40,40);
         auxCircle.setFillColor(sf::Color(0,0,0,100));
@@ -244,7 +257,6 @@ void Editor::run(){
         window->draw(auxCircle);
         
         window->display();
-               //std::cout << "--" << std::endl;
     }
     
 }
