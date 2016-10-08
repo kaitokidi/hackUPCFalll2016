@@ -151,16 +151,22 @@ void GaemData__RestartLvl(GaemData* data) {
   }
 }
 
+sf::Vector2f getIncremento(GaemData* data, int id, float dt) {
+  Pajaritos* p = &data->pajaritos;
+  Raios* r = &data->raios;
+  sf::Vector2i v(p->vx[r->pajaritoID[id]][r->nRaio[id]], p->vy[r->pajaritoID[id]][r->nRaio[id]]);
+  float modul =  std::sqrt(v.x * v.x + v.y * v.y);
+  // return sf::Vector2f (v.x / modul, v.y / modul) * r->timerms[id] * float(RAIO_SPEED) + sf::Vector2f (v.x / modul, v.y / modul) * float(RAIO_SPEED)/2.f * float(sin(r->timerms[id]*10))/2.f;
+  return sf::Vector2f (v.x / modul, v.y / modul) * r->timerms[id] * float(RAIO_SPEED);
+}
+
 void UpdateRaio(GaemData* gd, int id, float dt) {
   Pajaritos* p = &gd->pajaritos;
   Raios* r = &gd->raios;
   if (r->done[id]) return;
   r->timerms[id] += dt;
   sf::Vector2i ini(r->x[id], r->y[id]);
-  sf::Vector2i v(p->vx[r->pajaritoID[id]][r->nRaio[id]], p->vy[r->pajaritoID[id]][r->nRaio[id]]);
-  float modul =  std::sqrt(v.x * v.x + v.y * v.y);
-  sf::Vector2f vu = sf::Vector2f (v.x / modul, v.y / modul);
-  sf::Vector2i dest = ini + sf::Vector2i(vu * r->timerms[id] * float(RAIO_SPEED));
+  sf::Vector2i dest = ini + sf::Vector2i(getIncremento(gd, id, dt));
   // Mirar si golpea con un pajarito
   for (unsigned int i = 0; i <= ID__Pajarito; ++i) {
     if (i == r->pajaritoID[id]) continue;
@@ -171,7 +177,7 @@ void UpdateRaio(GaemData* gd, int id, float dt) {
       r->done[id] = true;
       if (p->active[i]) continue;
       p->active[i] = true;
-      
+
       for (int j = 0; j <= p->p[i]; ++j) {
         int idNewRaio = GaemData__GetNewIDRaio();
         r->x[idNewRaio] = p->x[i];
@@ -185,15 +191,13 @@ void UpdateRaio(GaemData* gd, int id, float dt) {
   }
   // Mirar si golepa con un raio
   sf::Vector2f q(ini);
-  sf::Vector2f s(vu * r->timerms[id] * float(RAIO_SPEED));
+  sf::Vector2f s(getIncremento(gd, id, dt));
   for (unsigned int i = 0; i <= ID__Raio; ++i) {
     if (r->pajaritoID[i] == r->pajaritoID[id]) continue;
     sf::Vector2i v(p->vx[r->pajaritoID[i]][r->nRaio[i]], p->vy[r->pajaritoID[i]][r->nRaio[i]]);
     sf::Vector2f p(r->x[i], r->y[i]);
 
-    float modul =  std::sqrt(v.x * v.x + v.y * v.y);
-    sf::Vector2f vu = sf::Vector2f (v.x / modul, v.y / modul);
-    sf::Vector2f r(vu * gd->raios.timerms[i] * float(RAIO_SPEED));
+    sf::Vector2f r(getIncremento(gd, i, dt));
 
     float t = dot((q - p),s)/dot(r,s);
     float u = dot((q - p),r)/dot(r,s);

@@ -70,10 +70,7 @@ int main(){
 
         for (int i = 0; i <= ID__Raio; ++i) {
           sf::Vector2i ini(data->raios.x[i], data->raios.y[i]);
-          sf::Vector2i v(data->pajaritos.vx[data->raios.pajaritoID[i]][data->raios.nRaio[i]], data->pajaritos.vy[data->raios.pajaritoID[i]][data->raios.nRaio[i]]);
-          float modul =  std::sqrt(v.x * v.x + v.y * v.y);
-          sf::Vector2f vu = sf::Vector2f (v.x / modul, v.y / modul);
-          sf::Vector2i dest = ini + sf::Vector2i(vu * data->raios.timerms[i] * float(RAIO_SPEED));
+          sf::Vector2i dest = ini + sf::Vector2i(getIncremento(data, i, data->raios.timerms[i]));
           sf::Vertex line[] = {
             sf::Vertex(sf::Vector2f(ini)),
             sf::Vertex(sf::Vector2f(dest))
