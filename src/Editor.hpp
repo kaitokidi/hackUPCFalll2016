@@ -16,6 +16,7 @@ public:
     
 private:
     
+    bool readyForSecondClick;
     bool mousePressed; 
     bool textActive;
 
@@ -27,6 +28,7 @@ private:
     sf::Font font;
     sf::RenderWindow* window;
 
+    std::vector<int> types;
     std::vector<sf::CircleShape> circles;
     std::vector<sf::CircleShape> littleCircle;
 };
