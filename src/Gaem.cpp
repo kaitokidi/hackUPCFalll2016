@@ -208,11 +208,13 @@ void GaemLogic_updateGame(GaemData* gd, float dt_milis, sf::RenderWindow* target
     }
   }
 
-  int totalDone = 0;
-  for (int i = 0; i <= int(ID__Raio); ++i) {
+  for (int i = 0; i <= int(ID__Raio ); ++i) {
     UpdateRaio(gd, i, dt_milis);
-    totalDone += gd->raios.done[i];
   }
-  if (totalDone == ID__Pajarito) loadLevel(gd, ++GaemData__currentLvl);
+  int totalDone = 0;
+  for (int i = 0; i <= int(ID__Pajarito); ++i) {
+    totalDone += gd->pajaritos.active[i];
+  }
+  if (totalDone == ID__Pajarito + 1) loadLevel(gd, ++GaemData__currentLvl);
 
 }
