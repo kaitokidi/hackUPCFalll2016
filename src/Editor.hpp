@@ -20,6 +20,8 @@ private:
     bool mousePressed; 
     bool textActive;
 
+    std::string state;
+    
     int brushType;
     int uselessVariable;
 
