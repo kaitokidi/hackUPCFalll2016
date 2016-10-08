@@ -10,11 +10,20 @@ Editor::Editor(sf::RenderWindow* pwindow){
     textActive = false;
     text.setString("level");
     window->setKeyRepeatEnabled(false);
+    brushType = 0;
+    
+    textType.setFont(font);
+    textType.setCharacterSize(24); 
+    textType.setColor(sf::Color::Green);
+    textType.setStyle(sf::Text::Bold | sf::Text::Underlined);
+    textType.setPosition(0,30);
+    textType.setString("0");
 }
     
 void Editor::run(){
     
     while(window->isOpen()){
+    
 
         sf::Event event;
         while(window->pollEvent(event)){
@@ -42,6 +51,12 @@ void Editor::run(){
                             }
                         }
                     }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && event.key.code == sf::Keyboard::T) {
+                        ++brushType;
+                        if(brushType >= 10) brushType = 0;
+                        textType.setString(std::to_string(brushType));
+                        
+                    }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && event.key.code == sf::Keyboard::S) {
                         std::ofstream aux("../lvls/"+text.getString());
                         if(aux.is_open()){
@@ -49,20 +64,7 @@ void Editor::run(){
                                 
                                 auto c = circles[i];
                                 auto lc = littleCircle[i];
-                                aux << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << '\n';
-                                littleCircle[i];
-                            }
-                            aux.close();
-                        }
-                    }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && event.key.code == sf::Keyboard::S) {
-                        std::ofstream aux(text.getString());
-                        if(aux.is_open()){
-                            for(size_t i = 0; i < circles.size(); ++i){
-                                
-                                auto c = circles[i];
-                                auto lc = littleCircle[i];
-                                aux << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << '\n';
+                                aux << brushType << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << '\n';
                                 littleCircle[i];
                             }
                             aux.close();
@@ -128,7 +130,7 @@ void Editor::run(){
             window->draw(line, 2, sf::Lines);
         }
         window->draw(text);
-        
+        window->draw(textType);
         sf::CircleShape auxCircle(40, 79);
         auxCircle.setOrigin(40,40);
         auxCircle.setFillColor(sf::Color(0,0,0,100));

@@ -19,9 +19,11 @@ private:
     bool mousePressed; 
     bool textActive;
 
+    int brushType;
     int uselessVariable;
 
     sf::Text text;
+    sf::Text textType;
     sf::Font font;
     sf::RenderWindow* window;
 
