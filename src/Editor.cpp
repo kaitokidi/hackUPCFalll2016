@@ -32,6 +32,7 @@ void Editor::run(){
                         text.setColor(sf::Color::Red);
                         text.setStyle(sf::Text::Bold | sf::Text::Underlined);
                         textActive = !textActive;
+                        if(textActive) text.setString("level");
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && event.key.code == sf::Keyboard::U) {
                         if(!mousePressed){
@@ -80,7 +81,7 @@ void Editor::run(){
                     break;
             }
         }   
-
+        
         float mouse_x, mouse_y;
         mouse_x = sf::Mouse::getPosition(*window).x; 
         mouse_y = sf::Mouse::getPosition(*window).y;
@@ -99,7 +100,6 @@ void Editor::run(){
                 sf::CircleShape auxCircle(2, 20);
                 auxCircle.setOrigin(2,2);
                 auxCircle.setFillColor(sf::Color(255,0,0));
-                
                 auto p1 = sf::Vector2f(circles[circles.size()-1].getPosition());
                 auto p2 = sf::Vector2f(mouse_x, mouse_y);
                 auto vector = sf::Vector2f(p2.x-p1.x, p2.y-p1.y);
@@ -113,7 +113,6 @@ void Editor::run(){
         }
         
         window->clear(sf::Color(255,251,239));
-
         for(size_t i = 0; i < circles.size(); ++i){
             window->draw(circles[i]);
         }
@@ -129,6 +128,13 @@ void Editor::run(){
             window->draw(line, 2, sf::Lines);
         }
         window->draw(text);
+        
+        sf::CircleShape auxCircle(40, 79);
+        auxCircle.setOrigin(40,40);
+        auxCircle.setFillColor(sf::Color(0,0,0,100));
+        auxCircle.setPosition(mouse_x, mouse_y);
+        window->draw(auxCircle);
+        
         window->display();
     }
     
