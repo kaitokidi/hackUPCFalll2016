@@ -15,7 +15,7 @@ int main(){
 		data = (GaemData*) malloc(sizeof(GaemData));
 		memset(data, 0, sizeof(GaemData));
 
-		loadLevel(data, "text");
+		loadLevel(data, "../lvls/level3");
 
 		sf::Clock clock;
     while(window.isOpen()) {
@@ -50,14 +50,13 @@ int main(){
           shape.setPosition(data->pajaritos.x[i], data->pajaritos.y[i]);
           shape.setRadius(PAJARITO_RADIO);
           shape.setFillColor(sf::Color::Blue);
-          shape.setOrigin(PAJARITO_RADIO/2,PAJARITO_RADIO/2);
+          shape.setOrigin(PAJARITO_RADIO,PAJARITO_RADIO);
           window.draw(shape);
         }
 
         for (int i = 0; i <= ID__Raio; ++i) {
           sf::Vector2i ini(data->raios.x[i], data->raios.y[i]);
           sf::Vector2i v(data->pajaritos.vx[data->raios.pajaritoID[i]], data->pajaritos.vy[data->raios.pajaritoID[i]]);
-          std::cout << v.x << " " << v.y << std::endl;
           float modul =  std::sqrt(v.x * v.x + v.y * v.y);
           sf::Vector2f vu = sf::Vector2f (v.x / modul, v.y / modul);
           sf::Vector2i dest = ini + sf::Vector2i(vu * data->raios.timerms[i] * float(RAIO_SPEED));

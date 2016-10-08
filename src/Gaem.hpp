@@ -119,12 +119,11 @@ void loadLevel(GaemData* gd, std::string path) {
   }
   for (unsigned int i = 0; i < vs.size(); i += 5) {
     int nextPajarito = GaemData__GetNewIDPajarito();
-    gd->pajaritos.x[nextPajarito]  = my_stoi(vs[i].second);
-    gd->pajaritos.y[nextPajarito]  = my_stoi(vs[i+1].second);
-    gd->pajaritos.vx[nextPajarito] = my_stoi(vs[i+2].second);
-    gd->pajaritos.vy[nextPajarito] = my_stoi(vs[i+3].second);
-    gd->pajaritos.p[nextPajarito] = Pajarito(my_stoi(vs[i+4].second));
-    std::cout << "Pajarituuu" << std::endl;
+    gd->pajaritos.p[nextPajarito] = Pajarito(my_stoi(vs[i].second));
+    gd->pajaritos.x[nextPajarito]  = my_stoi(vs[i+1].second);
+    gd->pajaritos.y[nextPajarito]  = my_stoi(vs[i+2].second);
+    gd->pajaritos.vx[nextPajarito] = my_stoi(vs[i+3].second);
+    gd->pajaritos.vy[nextPajarito] = my_stoi(vs[i+4].second);
   }
 }
 
@@ -147,6 +146,7 @@ void UpdateRaio(GaemData* gd, int id, float dt) {
     float dist = std::sqrt(v.x * v.x + v.y * v.y);
     if (dist < PAJARITO_RADIO) {
       r->done[id] = true;
+      if (p->active[i]) continue;
       p->active[i] = true;
 
       int idNewRaio = GaemData__GetNewIDRaio();
@@ -159,6 +159,10 @@ void UpdateRaio(GaemData* gd, int id, float dt) {
     }
   }
   // Mirar si golepa con un raio
+  for (unsigned int i = 0; i <= ID__Raio; ++i) {
+    if (i == id) continue;
+    
+  }
 
 }
 
