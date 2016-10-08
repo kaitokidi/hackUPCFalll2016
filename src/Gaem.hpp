@@ -12,13 +12,17 @@
 #include <SFML/Graphics.hpp>
 
 #define PAJARITO_RADIO 40
-#define RAIO_SPEED 100
+#define RAIO_SPEED 300
 
 enum Pajarito {
   bug,
   feature,
   Pajarito_Qtty
 };
+
+float dot(sf::Vector2f v1, sf::Vector2f v2) {
+  return v1.x * v2.y - v1.y * v2.x;
+}
 
 #define MAX_PAJA 64
 struct Pajaritos {
@@ -127,6 +131,13 @@ void loadLevel(GaemData* gd, std::string path) {
   }
 }
 
+void GaemData__RestartLvl(GaemData* data) {
+  GaemData_ResetIDRaio();
+  for (int i = 0; i <= ID__Pajarito; ++i) {
+    data->pajaritos.active[i] = false;
+  }
+}
+
 void UpdateRaio(GaemData* gd, int id, float dt) {
   Pajaritos* p = &gd->pajaritos;
   Raios* r = &gd->raios;
@@ -159,11 +170,25 @@ void UpdateRaio(GaemData* gd, int id, float dt) {
     }
   }
   // Mirar si golepa con un raio
+  sf::Vector2f q(ini);
+  sf::Vector2f s(vu * r->timerms[id] * float(RAIO_SPEED));
   for (unsigned int i = 0; i <= ID__Raio; ++i) {
     if (i == id) continue;
-    
-  }
+    sf::Vector2i v(p->vx[r->pajaritoID[i]], p->vy[r->pajaritoID[i]]);
+    sf::Vector2f p(r->x[i], r->y[i]);
 
+    float modul =  std::sqrt(v.x * v.x + v.y * v.y);
+    sf::Vector2f vu = sf::Vector2f (v.x / modul, v.y / modul);
+    sf::Vector2f r(vu * gd->raios.timerms[i] * float(RAIO_SPEED));
+
+    float t = dot((q - p),s)/dot(r,s);
+    float u = dot((q - p),r)/dot(r,s);
+
+    if (dot(r,s) != 0 && t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+      GaemData__RestartLvl(gd);
+      return;
+    }
+  }
 }
 
 void GaemLogic_updateGame(GaemData* gd, float dt_milis, sf::RenderWindow* target) {

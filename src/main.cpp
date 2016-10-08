@@ -15,7 +15,7 @@ int main(){
 		data = (GaemData*) malloc(sizeof(GaemData));
 		memset(data, 0, sizeof(GaemData));
 
-		loadLevel(data, "../lvls/level3");
+		loadLevel(data, "../lvls/level4");
 
 		sf::Clock clock;
     while(window.isOpen()) {
