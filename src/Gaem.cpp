@@ -3,6 +3,8 @@
 
 int GaemData__currentLvl = 1;
 
+sf::Music GaemData__Music[3];
+
 float dot(sf::Vector2f v1, sf::Vector2f v2) {
   return v1.x * v2.y - v1.y * v2.x;
 }
@@ -48,6 +50,11 @@ int my_stoi(std::string s) {
 void loadLevel(GaemData* gd, int nLvl) {
   GaemData_ResetIDPajarito();
   GaemData_ResetIDRaio();
+
+  for (int i = 0; i < 3; ++i) {
+    GaemData__Music[i].setLoop(true);
+    GaemData__Music[i].setVolume(0);
+  }
 
   DIR *dir;
   struct dirent *ent;
@@ -122,6 +129,11 @@ void GaemData__RestartLvl(GaemData* data) {
     data->pajaritos.active[i] = false;
   }
   data->clicked = false;
+
+  for (int i = 0; i < 3; ++i) {
+    GaemData__Music[i].setLoop(true);
+    GaemData__Music[i].setVolume(0);
+  }
 }
 
 sf::Vector2f getIncremento(GaemData* data, int id, float dt) {
@@ -221,6 +233,8 @@ void GaemLogic_updateGame(GaemData* gd, float dt_milis, sf::RenderWindow* target
   for (int i = 0; i <= int(ID__Pajarito); ++i) {
     totalDone += gd->pajaritos.active[i];
   }
+  float pct = float(totalDone) / float(ID__Pajarito);
+  for (int i = 0; i < pct*3; ++i) GaemData__Music[i].setVolume(100);
   if (totalDone == ID__Pajarito + 1) loadLevel(gd, ++GaemData__currentLvl);
 
 }

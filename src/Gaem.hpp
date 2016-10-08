@@ -10,6 +10,7 @@
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 #define PAJARITO_RADIO 40
 #define RAIO_SPEED 300
@@ -64,6 +65,8 @@ struct GaemData {
   Raios raios;
   bool clicked;
 };
+
+extern sf::Music GaemData__Music[];
 
 bool my_isint(std::string s);
 
