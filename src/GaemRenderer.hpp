@@ -10,6 +10,13 @@ sf::Shader glowerino;
 sf::RenderTexture raios;
 sf::Texture pajaritoTextrure;
 
+float getAngle(const sf::Vector2f &orig,const sf::Vector2f &des) {
+    return std::atan2(des.y - orig.y, des.x - orig.x)*180/(M_PI);
+}
+
+float getModule(const sf::Vector2f &orig, const sf::Vector2f &des) {
+    return std::sqrt(std::pow(std::abs(des.x-orig.x), 2) + std::pow(std::abs(des.y-orig.y), 2));
+}
 
 void GaemRenderer__Render(GaemData* data, sf::RenderWindow* window)
 {
@@ -52,6 +59,7 @@ static sf::Shader* txader = NULL;
             float(data->pajaritos.x[0]) / window->getSize().x,
             float(data->pajaritos.y[0]) / window->getSize().y
             );
+    
 //    for (int i = 0; i < ID__Pajarito; ++i)
     {
    //     txader->setParameter("pos", pos);
@@ -65,8 +73,8 @@ static sf::Shader* txader = NULL;
 
   for (int i = 0; i <= ID__Raio; ++i)
   {
-    sf::Vector2i ini(data->raios.x[i], data->raios.y[i]);
-    sf::Vector2i dest = ini + sf::Vector2i(getIncremento(data, i, data->raios.timerms[i]));
+    sf::Vector2f ini(data->raios.x[i], data->raios.y[i]);
+    sf::Vector2f dest = ini + sf::Vector2f(getIncremento(data, i, data->raios.timerms[i]));
     sf::Vertex line[] =
     {
       sf::Vertex(sf::Vector2f(ini)),
@@ -75,7 +83,15 @@ static sf::Shader* txader = NULL;
     line[0].color = sf::Color::Yellow;
     line[1].color = sf::Color::Yellow;
 
-    raios.draw(line, 2, sf::Lines);
+    //raios.draw(line, 2, sf::Lines);
+    
+    float module = getModule(ini,dest);
+    sf::RectangleShape rline(sf::Vector2f(module, 5));
+    float angle = getAngle(ini, dest);
+    rline.setPosition(ini.x,ini.y);
+    rline.rotate(angle);
+    
+    raios.draw(rline);
   }
   ///
   raios.display();
