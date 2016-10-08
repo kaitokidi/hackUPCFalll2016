@@ -66,14 +66,14 @@ struct GaemData {
   Pajaritos pajaritos;
   Raios raios;
   bool clicked;
-  float fadein;
+  bool restarting;
+  float fade;
 };
 
 
 #define MAX_MUSIC 3
 struct MusicStage {
   sf::Music music[MAX_MUSIC];
-  int vol;
 };
 
 extern MusicStage GaemData__music;
