@@ -17,6 +17,7 @@ public:
 private:
     
     bool mousePressed; 
+    bool textActive;
 
     int uselessVariable;
 

@@ -7,6 +7,9 @@ Editor::Editor(sf::RenderWindow* pwindow){
     if (!font.loadFromFile("../res/font.otf")) {
         std::cout << "font not loaded" << std::endl;
     }
+    textActive = false;
+    text.setString("level");
+    window->setKeyRepeatEnabled(false);
 }
     
 void Editor::run(){
@@ -19,26 +22,18 @@ void Editor::run(){
                 case sf::Event::Closed:
                     window->close();
                     exit(0);
-                case sf::Event::TextEntered:
-                        // Handle ASCII characters only
-                        if (event.text.unicode < 128)
-                        {
-                            std::string str = text.getString();
-                            str += static_cast<char>(event.text.unicode);
-                            text.setString(str);
-                        }
-                    break;
                 case  sf::Event::KeyPressed:
                     if (event.key.code == sf::Keyboard::Escape) {
                         return;
                     }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && event.key.code == sf::Keyboard::W){
+                    if (event.key.code == sf::Keyboard::W){
                         text.setFont(font);
                         text.setCharacterSize(24); 
                         text.setColor(sf::Color::Red);
                         text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+                        textActive = !textActive;
                     }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && event.key.code == sf::Keyboard::U) {
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && event.key.code == sf::Keyboard::U) {
                         if(!mousePressed){
                             if(circles.size() > 0){
                                 circles.pop_back();
@@ -46,8 +41,8 @@ void Editor::run(){
                             }
                         }
                     }
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && event.key.code == sf::Keyboard::S) {
-                        std::ofstream aux("filename.txt");
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && event.key.code == sf::Keyboard::S) {
+                        std::ofstream aux(text.getString());
                         if(aux.is_open()){
                             for(size_t i = 0; i < circles.size(); ++i){
                                 
@@ -59,6 +54,28 @@ void Editor::run(){
                             aux.close();
                         }
                     }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && event.key.code == sf::Keyboard::S) {
+                        std::ofstream aux(text.getString());
+                        if(aux.is_open()){
+                            for(size_t i = 0; i < circles.size(); ++i){
+                                
+                                auto c = circles[i];
+                                auto lc = littleCircle[i];
+                                aux << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << '\n';
+                                littleCircle[i];
+                            }
+                            aux.close();
+                        }
+                    }
+                    case sf::Event::TextEntered:
+                        // Handle ASCII characters only
+                        if (textActive && event.text.unicode < 128 && event.text.unicode > 48 && event.text.unicode != 119 && event.text.unicode != 87)
+                        {
+                            std::string str = text.getString();
+                            str += static_cast<char>(event.text.unicode);
+                            text.setString(str);
+                        }
+                    break;
                 default:
                     break;
             }
@@ -110,8 +127,8 @@ void Editor::run(){
                 };
 
             window->draw(line, 2, sf::Lines);
-            window->draw(text);
         }
+        window->draw(text);
         window->display();
     }
     
