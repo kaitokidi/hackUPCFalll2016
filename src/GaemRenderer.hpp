@@ -14,12 +14,13 @@ sf::Texture pajaritoTextrure;
 void GaemRenderer__Render(GaemData* data, sf::RenderWindow* window) 
 {
 static sf::Shader* txader = NULL;
+    static sf::Clock clk;
     if (txader == NULL)
     {
         txader = new sf::Shader();
         txader->loadFromFile("../res/shaders/shaderino.frag", sf::Shader::Type::Fragment);
+        clk.restart();
     }
-    static sf::Clock clk;
     txader->setParameter("time", clk.getElapsedTime().asSeconds());
 
   sf::Sprite pajarito;
