@@ -6,16 +6,21 @@
 #include <stdlib.h>
 #include "Editor.hpp"
 #include "Gaem.hpp"
+#include "Portada.hpp"
 
 int main(){
 
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "./gaem", sf::Style::Close);
     window.setFramerateLimit(60);
+
+    Portada p;
+    p.display(&window, "../res/pngs/backgroundMENU.png");
+
 		GaemData* data;
 		data = (GaemData*) malloc(sizeof(GaemData));
 		memset(data, 0, sizeof(GaemData));
 
-		loadLevel(data, "../lvls/level4");
+		loadLevel(data, GaemData__currentLvl);
 
 		sf::Clock clock;
     while(window.isOpen()) {
