@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <iostream>
+#include <fstream>
 #include <cmath>
 
 class Editor {
@@ -22,5 +23,5 @@ private:
     sf::RenderWindow* window;
 
     std::vector<sf::CircleShape> circles;
-        
+    std::vector<sf::CircleShape> littleCircle;
 };
