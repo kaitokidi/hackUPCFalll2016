@@ -60,10 +60,13 @@ int GaemData__GetNewIDRaio();
 
 void GaemData_ResetIDRaio();
 
+#define FADE_TIMER 1.f
+
 struct GaemData {
   Pajaritos pajaritos;
   Raios raios;
   bool clicked;
+  float fadein;
 };
 
 

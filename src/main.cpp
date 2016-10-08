@@ -33,7 +33,7 @@ int main(){
 
   for (int i = 0; i < 3; ++i) {
     GaemData__music.music[i].setLoop(true);
-    GaemData__music.music[i].setVolume(0);
+    GaemData__music.music[i].setVolume((!i ? 50 : 0));
     GaemData__music.music[i].play();
   }
 
