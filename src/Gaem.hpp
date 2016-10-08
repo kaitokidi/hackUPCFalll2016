@@ -12,20 +12,26 @@
 #include <SFML/Graphics.hpp>
 
 #define PAJARITO_RADIO 40
-#define RAIO_SPEED 100
+#define RAIO_SPEED 300
 
 enum Pajarito {
-  bug,
+  simple = 0,
+  doble = 1,
+  triple = 2,
   feature,
   Pajarito_Qtty
 };
+
+float dot(sf::Vector2f v1, sf::Vector2f v2) {
+  return v1.x * v2.y - v1.y * v2.x;
+}
 
 #define MAX_PAJA 64
 struct Pajaritos {
   int x[MAX_PAJA];
   int y[MAX_PAJA];
-  int vx[MAX_PAJA];
-  int vy[MAX_PAJA];
+  int vx[MAX_PAJA][3];
+  int vy[MAX_PAJA][3];
   Pajarito p[MAX_PAJA];
   bool active[MAX_PAJA];
   float timerms[MAX_PAJA];
@@ -49,6 +55,7 @@ struct Raios {
   float timerms[MAX_RAIO];
   bool done[MAX_RAIO];
   int pajaritoID[MAX_RAIO];
+  int nRaio[MAX_RAIO];
 };
 
 static int ID__Raio = -1;
@@ -122,9 +129,35 @@ void loadLevel(GaemData* gd, std::string path) {
     gd->pajaritos.p[nextPajarito] = Pajarito(my_stoi(vs[i].second));
     gd->pajaritos.x[nextPajarito]  = my_stoi(vs[i+1].second);
     gd->pajaritos.y[nextPajarito]  = my_stoi(vs[i+2].second);
-    gd->pajaritos.vx[nextPajarito] = my_stoi(vs[i+3].second);
-    gd->pajaritos.vy[nextPajarito] = my_stoi(vs[i+4].second);
+    gd->pajaritos.vx[nextPajarito][0] = my_stoi(vs[i+3].second);
+    gd->pajaritos.vy[nextPajarito][0] = my_stoi(vs[i+4].second);
+    if (my_stoi(vs[i].second)>0) {
+      gd->pajaritos.vx[nextPajarito][1] = my_stoi(vs[i+5].second);
+      gd->pajaritos.vy[nextPajarito][1] = my_stoi(vs[i+6].second);
+      if (my_stoi(vs[i].second)>1) {
+        gd->pajaritos.vx[nextPajarito][2] = my_stoi(vs[i+7].second);
+        gd->pajaritos.vy[nextPajarito][2] = my_stoi(vs[i+8].second);
+        i += 2;
+      }
+      i += 2;
+    }
   }
+}
+
+void GaemData__RestartLvl(GaemData* data) {
+  GaemData_ResetIDRaio();
+  for (int i = 0; i <= ID__Pajarito; ++i) {
+    data->pajaritos.active[i] = false;
+  }
+}
+
+sf::Vector2f getIncremento(GaemData* data, int id, float dt) {
+  Pajaritos* p = &data->pajaritos;
+  Raios* r = &data->raios;
+  sf::Vector2i v(p->vx[r->pajaritoID[id]][r->nRaio[id]], p->vy[r->pajaritoID[id]][r->nRaio[id]]);
+  float modul =  std::sqrt(v.x * v.x + v.y * v.y);
+  // return sf::Vector2f (v.x / modul, v.y / modul) * r->timerms[id] * float(RAIO_SPEED) + sf::Vector2f (v.x / modul, v.y / modul) * float(RAIO_SPEED)/2.f * float(sin(r->timerms[id]*10))/2.f;
+  return sf::Vector2f (v.x / modul, v.y / modul) * r->timerms[id] * float(RAIO_SPEED);
 }
 
 void UpdateRaio(GaemData* gd, int id, float dt) {
@@ -133,11 +166,7 @@ void UpdateRaio(GaemData* gd, int id, float dt) {
   if (r->done[id]) return;
   r->timerms[id] += dt;
   sf::Vector2i ini(r->x[id], r->y[id]);
-  sf::Vector2i v(p->vx[r->pajaritoID[id]], p->vy[r->pajaritoID[id]]);
-  float modul =  std::sqrt(v.x * v.x + v.y * v.y);
-  sf::Vector2f vu = sf::Vector2f (v.x / modul, v.y / modul);
-  sf::Vector2i dest = ini + sf::Vector2i(vu * r->timerms[id] * float(RAIO_SPEED));
-  // std::cout << "Soy el rayo " << id << " y estoy en " << dest.x << " " << dest.y << " " << r->timerms[id] << " " << dt << std::endl;
+  sf::Vector2i dest = ini + sf::Vector2i(getIncremento(gd, id, dt));
   // Mirar si golpea con un pajarito
   for (unsigned int i = 0; i <= ID__Pajarito; ++i) {
     if (i == r->pajaritoID[id]) continue;
@@ -149,21 +178,36 @@ void UpdateRaio(GaemData* gd, int id, float dt) {
       if (p->active[i]) continue;
       p->active[i] = true;
 
-      int idNewRaio = GaemData__GetNewIDRaio();
-
-      r->x[idNewRaio] = p->x[i];
-      r->y[idNewRaio] = p->y[i];
-      r->pajaritoID[idNewRaio] = i;
-      r->timerms[idNewRaio] = 0;
-      r->done[idNewRaio] = false;
+      for (int j = 0; j <= p->p[i]; ++j) {
+        int idNewRaio = GaemData__GetNewIDRaio();
+        r->x[idNewRaio] = p->x[i];
+        r->y[idNewRaio] = p->y[i];
+        r->pajaritoID[idNewRaio] = i;
+        r->timerms[idNewRaio] = 0;
+        r->done[idNewRaio] = false;
+        r->nRaio[idNewRaio] = j;
+      }
     }
   }
   // Mirar si golepa con un raio
+  sf::Vector2f q(ini);
+  sf::Vector2f s(getIncremento(gd, id, dt));
   for (unsigned int i = 0; i <= ID__Raio; ++i) {
-    if (i == id) continue;
-    
-  }
+    if (r->pajaritoID[i] == r->pajaritoID[id]) continue;
+    sf::Vector2i v(p->vx[r->pajaritoID[i]][r->nRaio[i]], p->vy[r->pajaritoID[i]][r->nRaio[i]]);
+    sf::Vector2f p(r->x[i], r->y[i]);
 
+    sf::Vector2f r(getIncremento(gd, i, dt));
+
+    float t = dot((q - p),s)/dot(r,s);
+    float u = dot((q - p),r)/dot(r,s);
+
+    // Colisionan los segmentos
+    if (dot(r,s) != 0 && t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+      GaemData__RestartLvl(gd);
+      return;
+    }
+  }
 }
 
 void GaemLogic_updateGame(GaemData* gd, float dt_milis, sf::RenderWindow* target) {
@@ -178,13 +222,16 @@ void GaemLogic_updateGame(GaemData* gd, float dt_milis, sf::RenderWindow* target
         std::cout << "Clicqued" << std::endl;
         gd->pajaritos.active[i] = true;
 
-        int idNewRaio = GaemData__GetNewIDRaio();
+        for (int j = 0; j <= gd->pajaritos.p[i]; ++j) {
+          int idNewRaio = GaemData__GetNewIDRaio();
 
-        gd->raios.x[idNewRaio] = gd->pajaritos.x[i];
-        gd->raios.y[idNewRaio] = gd->pajaritos.y[i];
-        gd->raios.pajaritoID[idNewRaio] = i;
-        gd->raios.timerms[idNewRaio] = 0;
-        gd->raios.done[idNewRaio] = false;
+          gd->raios.x[idNewRaio] = gd->pajaritos.x[i];
+          gd->raios.y[idNewRaio] = gd->pajaritos.y[i];
+          gd->raios.pajaritoID[idNewRaio] = i;
+          gd->raios.timerms[idNewRaio] = 0;
+          gd->raios.done[idNewRaio] = false;
+          gd->raios.nRaio[idNewRaio] = j;
+        }
       }
     }
   }
