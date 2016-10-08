@@ -3,7 +3,7 @@
 
 int GaemData__currentLvl = 1;
 
-sf::Music GaemData__Music[3];
+MusicStage GaemData__music;
 
 float dot(sf::Vector2f v1, sf::Vector2f v2) {
   return v1.x * v2.y - v1.y * v2.x;
@@ -51,9 +51,9 @@ void loadLevel(GaemData* gd, int nLvl) {
   GaemData_ResetIDPajarito();
   GaemData_ResetIDRaio();
 
-  for (int i = 0; i < 3; ++i) {
-    GaemData__Music[i].setLoop(true);
-    GaemData__Music[i].setVolume(0);
+  for (int i = 0; i < MAX_MUSIC; ++i) {
+    GaemData__music.music[i].setLoop(true);
+    GaemData__music.music[i].setVolume(0);
   }
 
   DIR *dir;
@@ -131,8 +131,8 @@ void GaemData__RestartLvl(GaemData* data) {
   data->clicked = false;
 
   for (int i = 0; i < 3; ++i) {
-    GaemData__Music[i].setLoop(true);
-    GaemData__Music[i].setVolume(0);
+    GaemData__music.music[i].setLoop(true);
+    GaemData__music.music[i].setVolume(0);
   }
 }
 
@@ -195,6 +195,14 @@ void UpdateRaio(GaemData* gd, int id, float dt) {
   }
 }
 
+void tendVolumenTo(sf::Music& m, int tend, float deltaTime) {
+  if (m.getVolume() == tend) return;
+  float diff = (tend - m.getVolume())  * deltaTime;
+  if      (diff > 0 && m.getVolume() + diff > 100) m.setVolume(100);
+  else if (diff > 0 && m.getVolume() + diff <   0) m.setVolume(  0);
+  else m.setVolume(m.getVolume() + diff);
+}
+
 void GaemLogic_updateGame(GaemData* gd, float dt_milis, sf::RenderWindow* target) {
   sf::Vector2i mousePosition = sf::Mouse::getPosition(*target);
   bool mousePressed = sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
@@ -234,7 +242,10 @@ void GaemLogic_updateGame(GaemData* gd, float dt_milis, sf::RenderWindow* target
     totalDone += gd->pajaritos.active[i];
   }
   float pct = float(totalDone) / float(ID__Pajarito);
-  for (int i = 0; i < pct*3; ++i) GaemData__Music[i].setVolume(100);
+  for (int i = 0; i < pct*3; ++i) {
+    tendVolumenTo(GaemData__music.music[i], 100, dt_milis);
+    // GaemData__music.music[i].setVolume(100);
+  }
   if (totalDone == ID__Pajarito + 1) loadLevel(gd, ++GaemData__currentLvl);
 
 }

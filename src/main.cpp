@@ -27,14 +27,14 @@ int main(){
   glowerino.setParameter("textureSize", sf::Vector2f(window.getSize()));
   glowerino.setParameter("size", 2.f);
 
-  GaemData__Music[0].openFromFile("../res/bajo1.wav");
-  GaemData__Music[1].openFromFile("../res/melodia1.wav");
-  GaemData__Music[2].openFromFile("../res/agudos1.wav");
+  GaemData__music.music[0].openFromFile("../res/bajo1.wav");
+  GaemData__music.music[1].openFromFile("../res/melodia1.wav");
+  GaemData__music.music[2].openFromFile("../res/agudos1.wav");
 
   for (int i = 0; i < 3; ++i) {
-    GaemData__Music[i].setLoop(true);
-    GaemData__Music[i].setVolume(0);
-    GaemData__Music[i].play();
+    GaemData__music.music[i].setLoop(true);
+    GaemData__music.music[i].setVolume(0);
+    GaemData__music.music[i].play();
   }
 
   raios.create(window.getSize().x, window.getSize().y);

@@ -66,7 +66,15 @@ struct GaemData {
   bool clicked;
 };
 
-extern sf::Music GaemData__Music[];
+
+#define MAX_MUSIC 3
+struct MusicStage {
+  sf::Music music[MAX_MUSIC];
+  int vol;
+};
+
+extern MusicStage GaemData__music;
+
 
 bool my_isint(std::string s);
 
