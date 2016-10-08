@@ -117,7 +117,7 @@ void Editor::run(){
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && event.key.code == sf::Keyboard::T) {
                         ++brushType;
-                        if(brushType >= 1) brushType = 0;
+                        if(brushType > 1) brushType = 0;
                         textType.setString(std::to_string(brushType));
 
                     }
