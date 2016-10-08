@@ -47,16 +47,30 @@ int main(){
 
         for (int i = 0; i <= ID__Pajarito; ++i) {
           sf::CircleShape shape;
-          shape.setPosition(data->pajaritos.x[i], data->pajaritos.y[i]);
+          sf::Vector2f circlePos(data->pajaritos.x[i], data->pajaritos.y[i]);
+          shape.setPosition(circlePos);
           shape.setRadius(PAJARITO_RADIO);
           shape.setFillColor(sf::Color::Blue);
           shape.setOrigin(PAJARITO_RADIO,PAJARITO_RADIO);
           window.draw(shape);
+          for (int j = 0; j <= data->pajaritos.p[i]; ++j) {
+            sf::CircleShape triangle(10, 3);
+            triangle.setOrigin(10, 10);
+            float deltaX = data->pajaritos.vx[i][j];
+            float deltaY = data->pajaritos.vy[i][j];
+            float angle = atan2(deltaY, deltaX) * 180 / M_PI;
+            triangle.setRotation(angle + 90);
+            float modul =  std::sqrt(deltaX * deltaX + deltaY * deltaY);
+            sf::Vector2f vu = sf::Vector2f (deltaX / modul, deltaY / modul);
+            sf::Vector2f offset(vu * float(PAJARITO_RADIO));
+            triangle.setPosition(circlePos + offset);
+            window.draw(triangle);
+          }
         }
 
         for (int i = 0; i <= ID__Raio; ++i) {
           sf::Vector2i ini(data->raios.x[i], data->raios.y[i]);
-          sf::Vector2i v(data->pajaritos.vx[data->raios.pajaritoID[i]], data->pajaritos.vy[data->raios.pajaritoID[i]]);
+          sf::Vector2i v(data->pajaritos.vx[data->raios.pajaritoID[i]][data->raios.nRaio[i]], data->pajaritos.vy[data->raios.pajaritoID[i]][data->raios.nRaio[i]]);
           float modul =  std::sqrt(v.x * v.x + v.y * v.y);
           sf::Vector2f vu = sf::Vector2f (v.x / modul, v.y / modul);
           sf::Vector2i dest = ini + sf::Vector2i(vu * data->raios.timerms[i] * float(RAIO_SPEED));
