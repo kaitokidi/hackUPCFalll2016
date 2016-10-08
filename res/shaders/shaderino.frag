@@ -18,7 +18,7 @@ void main()
         if (d < 0.4f)
         {
             float cc = 0.5f + (0.5f) * nsin(time*8.0f);
-            if (isTouch)
+            if (istouch)
             {
             color[0] = 1.0f;
             color[1] = 0.5f;
@@ -30,7 +30,7 @@ void main()
                 color[1] = 0.5f;
                 color[2] = 1.0f;
             }
-            color[3] = cc;
+            color[3] = time/5.0f;
         }
 
        // multiply it by the color

@@ -2,7 +2,11 @@ uniform sampler2D texture;
 uniform vec2 textureSize;
 uniform float size;
 
-float isOutline(float alfa) {
+uniform vec3 points[8];
+uniform int npoints;
+
+float isOutline(float alfa) 
+{
 	if (alfa > 0.5f) return 0.0f;
 	float minDist = 1.0f;
 //	float imin,imax,jmin,jmax;
@@ -20,7 +24,8 @@ float isOutline(float alfa) {
 	return 0.0f;
 }
 
-void main() {
+void main() 
+{
 	vec4 originalColor = texture2D(texture,gl_TexCoord[0].st) * gl_Color;
 	float outline = isOutline(originalColor.w);
 	if (outline > 0.0f) gl_FragColor = vec4(1.0f,1.0f,0.0f,1.0f-outline);
