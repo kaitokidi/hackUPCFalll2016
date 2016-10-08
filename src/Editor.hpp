@@ -16,17 +16,24 @@ public:
     
 private:
     
+    bool readyForSecondClick;
     bool mousePressed; 
     bool textActive;
-
+    bool visibility;
+    
+    std::string state;
+    
     int brushType;
     int uselessVariable;
 
     sf::Text text;
     sf::Text textType;
+    sf::Text textVisibility;
+    
     sf::Font font;
     sf::RenderWindow* window;
 
+    std::vector<int> types;
     std::vector<sf::CircleShape> circles;
     std::vector<sf::CircleShape> littleCircle;
 };

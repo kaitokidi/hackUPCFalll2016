@@ -6,16 +6,30 @@
 #include <stdlib.h>
 #include "Editor.hpp"
 #include "Gaem.hpp"
+#include "Portada.hpp"
+#include "GaemRenderer.hpp"
 
 int main(){
-
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "./gaem", sf::Style::Close);
     window.setFramerateLimit(60);
+
+    Portada p;
+    p.display(&window, "../res/pngs/backgroundMENU.png");
+
 		GaemData* data;
 		data = (GaemData*) malloc(sizeof(GaemData));
 		memset(data, 0, sizeof(GaemData));
 
-		loadLevel(data, "../lvls/level3");
+    // Graphics stuff
+    pajaritoTextrure.loadFromFile("../res/pngs/pinchito.png");
+    blurrerino.loadFromFile("../res/shaders/blurrerino.frag", sf::Shader::Type::Fragment);
+    glowerino.loadFromFile("../res/shaders/glowerino.frag", sf::Shader::Type::Fragment);
+    glowerino.setParameter("textureSize", sf::Vector2f(window.getSize()));
+    glowerino.setParameter("size", 2.f);
+
+    raios.create(window.getSize().x, window.getSize().y);
+
+		loadLevel(data, GaemData__currentLvl);
 
 		sf::Clock clock;
     while(window.isOpen()) {
@@ -35,6 +49,9 @@ int main(){
                         Editor editor(&window);
                         editor.run();
                     }
+                    if (event.key.code == sf::Keyboard::N) {
+                        loadLevel(data, ++GaemData__currentLvl);
+                    }
                     break;
                 default:
                     break;
@@ -44,30 +61,7 @@ int main(){
 				GaemLogic_updateGame(data, deltaTime, &window);
 
         window.clear(sf::Color::Black);
-
-        for (int i = 0; i <= ID__Pajarito; ++i) {
-          sf::CircleShape shape;
-          shape.setPosition(data->pajaritos.x[i], data->pajaritos.y[i]);
-          shape.setRadius(PAJARITO_RADIO);
-          shape.setFillColor(sf::Color::Blue);
-          shape.setOrigin(PAJARITO_RADIO,PAJARITO_RADIO);
-          window.draw(shape);
-        }
-
-        for (int i = 0; i <= ID__Raio; ++i) {
-          sf::Vector2i ini(data->raios.x[i], data->raios.y[i]);
-          sf::Vector2i v(data->pajaritos.vx[data->raios.pajaritoID[i]], data->pajaritos.vy[data->raios.pajaritoID[i]]);
-          float modul =  std::sqrt(v.x * v.x + v.y * v.y);
-          sf::Vector2f vu = sf::Vector2f (v.x / modul, v.y / modul);
-          sf::Vector2i dest = ini + sf::Vector2i(vu * data->raios.timerms[i] * float(RAIO_SPEED));
-          sf::Vertex line[] = {
-            sf::Vertex(sf::Vector2f(ini)),
-            sf::Vertex(sf::Vector2f(dest))
-          };
-          window.draw(line, 2, sf::Lines);
-        }
-
-
+        GaemRenderer__Render(data, &window);
         window.display();
     }
 }
