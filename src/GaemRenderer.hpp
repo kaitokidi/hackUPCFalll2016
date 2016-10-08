@@ -83,7 +83,7 @@ static sf::Shader* txader = NULL;
   sf::Sprite raiosConjuntos;
   raiosConjuntos.setTexture(raios.getTexture());
 
-  window->draw(raiosConjuntos, txader);
+  window->draw(raiosConjuntos);
 
 
   // new Shit
