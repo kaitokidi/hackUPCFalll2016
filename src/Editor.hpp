@@ -34,6 +34,7 @@ private:
     sf::RenderWindow* window;
 
     std::vector<int> types;
+    std::vector<int> visibilities;
     std::vector<sf::CircleShape> circles;
     std::vector<sf::CircleShape> littleCircle;
 };

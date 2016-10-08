@@ -30,6 +30,9 @@
      Undo command
      the last element added will be deleted.
  
+ if you click C + V
+     toggle if the next item placed can be touched or not.
+     
  if you are in type == 0
      you will draw basic pins.
      click the left mouse button on the place you want it to be placed. 
@@ -110,7 +113,7 @@ void Editor::run(){
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::C) && event.key.code == sf::Keyboard::T) {
                         ++brushType;
-                        if(brushType >= 10) brushType = 0;
+                        if(brushType >= 1) brushType = 0;
                         textType.setString(std::to_string(brushType));
                         
                     }
@@ -129,11 +132,12 @@ void Editor::run(){
                                 auto c = circles[i];
                                 auto lc = littleCircle[littleCircleindex];
                                 int type = types[i];
-                                if(type == 0) aux << type << " " << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << " " << visibility << '\n';
+                                int vis = visibilities[i];
+                                if(type == 0) aux << type << " " << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << " " << vis << '\n';
                                 if(type == 1) {
                                     ++littleCircleindex;
                                     auto lc2 = littleCircle[littleCircleindex];
-                                    aux << type << " " << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << " " << std::floor(lc2.getPosition().x - c.getPosition().x) << " " << std::floor(lc2.getPosition().y - c.getPosition().y) << " " << visibility << '\n';
+                                    aux << type << " " << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << " " << std::floor(lc2.getPosition().x - c.getPosition().x) << " " << std::floor(lc2.getPosition().y - c.getPosition().y) << " " << vis << '\n';
                                 }
                                 
                                 littleCircleindex++;
@@ -157,7 +161,7 @@ void Editor::run(){
         float mouse_x, mouse_y;
         mouse_x = sf::Mouse::getPosition(*window).x; 
         mouse_y = sf::Mouse::getPosition(*window).y;
-                        //std::cout << "newitera" << std::endl;
+
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
             if(!mousePressed){
                 mousePressed = true;
@@ -169,6 +173,7 @@ void Editor::run(){
                     auxCircle.setPosition(mouse_x, mouse_y);
                     circles.push_back(auxCircle);
                     types.push_back(brushType);
+                    visibilities.push_back(visibility);
                     
                     state = "mouseClicked";
                 }
