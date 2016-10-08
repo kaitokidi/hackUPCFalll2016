@@ -121,6 +121,7 @@ void GaemData__RestartLvl(GaemData* data) {
   for (int i = 0; i <= ID__Pajarito; ++i) {
     data->pajaritos.active[i] = false;
   }
+  data->clicked = false;
 }
 
 sf::Vector2f getIncremento(GaemData* data, int id, float dt) {
@@ -191,6 +192,8 @@ void GaemLogic_updateGame(GaemData* gd, float dt_milis, sf::RenderWindow* target
       int diffx = mousePosition.x - gd->pajaritos.x[i];
       int diffy = mousePosition.y - gd->pajaritos.y[i];
       if (std::sqrt(diffx * diffx + diffy * diffy) < PAJARITO_RADIO && gd->pajaritos.toqueteable[i]) {
+        if (gd->clicked) continue;
+        gd->clicked = true;
         std::cout << "Clicqued" << std::endl;
         gd->pajaritos.active[i] = true;
 
@@ -208,9 +211,12 @@ void GaemLogic_updateGame(GaemData* gd, float dt_milis, sf::RenderWindow* target
     }
   }
 
+  int nDone = 0;
   for (int i = 0; i <= int(ID__Raio ); ++i) {
     UpdateRaio(gd, i, dt_milis);
+    nDone += gd->raios.done[i];
   }
+  if (gd->clicked && nDone == ID__Raio + 1) GaemData__RestartLvl(gd);
   int totalDone = 0;
   for (int i = 0; i <= int(ID__Pajarito); ++i) {
     totalDone += gd->pajaritos.active[i];

@@ -62,6 +62,7 @@ void GaemData_ResetIDRaio();
 struct GaemData {
   Pajaritos pajaritos;
   Raios raios;
+  bool clicked;
 };
 
 bool my_isint(std::string s);
