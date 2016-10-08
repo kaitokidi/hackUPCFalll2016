@@ -55,7 +55,8 @@ int main(){
           sf::Vector2f circlePos(data->pajaritos.x[i], data->pajaritos.y[i]);
           shape.setPosition(circlePos);
           shape.setRadius(PAJARITO_RADIO);
-          shape.setFillColor(sf::Color::Blue);
+          sf::Color color = (data->pajaritos.toqueteable[i] ? sf::Color::Blue : sf::Color::Red);
+          shape.setFillColor(color);
           shape.setOrigin(PAJARITO_RADIO,PAJARITO_RADIO);
           window.draw(shape);
           for (int j = 0; j <= data->pajaritos.p[i]; ++j) {

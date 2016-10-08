@@ -190,7 +190,7 @@ void GaemLogic_updateGame(GaemData* gd, float dt_milis, sf::RenderWindow* target
       if (gd->pajaritos.active[i]) continue;
       int diffx = mousePosition.x - gd->pajaritos.x[i];
       int diffy = mousePosition.y - gd->pajaritos.y[i];
-      if (std::sqrt(diffx * diffx + diffy * diffy) < PAJARITO_RADIO) {
+      if (std::sqrt(diffx * diffx + diffy * diffy) < PAJARITO_RADIO && gd->pajaritos.toqueteable[i]) {
         std::cout << "Clicqued" << std::endl;
         gd->pajaritos.active[i] = true;
 
