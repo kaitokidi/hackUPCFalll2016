@@ -10,6 +10,7 @@
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 #define PAJARITO_RADIO 40
 #define RAIO_SPEED 300
@@ -59,11 +60,24 @@ int GaemData__GetNewIDRaio();
 
 void GaemData_ResetIDRaio();
 
+#define FADE_TIMER 1.f
+
 struct GaemData {
   Pajaritos pajaritos;
   Raios raios;
   bool clicked;
+  bool restarting;
+  float fade;
 };
+
+
+#define MAX_MUSIC 3
+struct MusicStage {
+  sf::Music music[MAX_MUSIC];
+};
+
+extern MusicStage GaemData__music;
+
 
 bool my_isint(std::string s);
 
