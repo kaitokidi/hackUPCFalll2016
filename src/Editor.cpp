@@ -129,11 +129,11 @@ void Editor::run(){
                                 auto c = circles[i];
                                 auto lc = littleCircle[littleCircleindex];
                                 int type = types[i];
-                                if(type == 0) aux << type << " " << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << " " << visible << '\n';
+                                if(type == 0) aux << type << " " << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << " " << visibility << '\n';
                                 if(type == 1) {
                                     ++littleCircleindex;
                                     auto lc2 = littleCircle[littleCircleindex];
-                                    aux << type << " " << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << " " << std::floor(lc2.getPosition().x - c.getPosition().x) << " " << std::floor(lc2.getPosition().y - c.getPosition().y) << " " << visible << '\n';
+                                    aux << type << " " << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << " " << std::floor(lc2.getPosition().x - c.getPosition().x) << " " << std::floor(lc2.getPosition().y - c.getPosition().y) << " " << visibility << '\n';
                                 }
                                 
                                 littleCircleindex++;
