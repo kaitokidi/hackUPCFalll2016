@@ -4,6 +4,9 @@
 Editor::Editor(sf::RenderWindow* pwindow){
     window = pwindow;
     mousePressed = false;
+    if (!font.loadFromFile("../res/font.otf")) {
+        std::cout << "font not loaded" << std::endl;
+    }
 }
     
 void Editor::run(){
@@ -16,11 +19,26 @@ void Editor::run(){
                 case sf::Event::Closed:
                     window->close();
                     exit(0);
+                case sf::Event::TextEntered:
+                        // Handle ASCII characters only
+                        if (event.text.unicode < 128)
+                        {
+                            std::string str = text.getString();
+                            str += static_cast<char>(event.text.unicode);
+                            text.setString(str);
+                        }
+                    break;
                 case  sf::Event::KeyPressed:
                     if (event.key.code == sf::Keyboard::Escape) {
                         return;
                     }
-                    if (event.key.code == sf::Keyboard::U) {
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && event.key.code == sf::Keyboard::W){
+                        text.setFont(font);
+                        text.setCharacterSize(24); 
+                        text.setColor(sf::Color::Red);
+                        text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+                    }
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && event.key.code == sf::Keyboard::U) {
                         if(!mousePressed){
                             if(circles.size() > 0){
                                 circles.pop_back();
@@ -28,14 +46,14 @@ void Editor::run(){
                             }
                         }
                     }
-                    if (event.key.code == sf::Keyboard::S) {
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && event.key.code == sf::Keyboard::S) {
                         std::ofstream aux("filename.txt");
                         if(aux.is_open()){
                             for(size_t i = 0; i < circles.size(); ++i){
                                 
                                 auto c = circles[i];
                                 auto lc = littleCircle[i];
-                                aux << c.getPosition().x << " " << c.getPosition().y << " " << lc.getPosition().x - c.getPosition().x << " " << lc.getPosition().y - c.getPosition().y << '\n';
+                                aux << c.getPosition().x << " " << c.getPosition().y << " " << std::floor(lc.getPosition().x - c.getPosition().x) << " " << std::floor(lc.getPosition().y - c.getPosition().y) << '\n';
                                 littleCircle[i];
                             }
                             aux.close();
@@ -92,6 +110,7 @@ void Editor::run(){
                 };
 
             window->draw(line, 2, sf::Lines);
+            window->draw(text);
         }
         window->display();
     }
