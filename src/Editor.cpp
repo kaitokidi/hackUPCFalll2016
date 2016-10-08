@@ -42,7 +42,7 @@ void Editor::run(){
                         }
                     }
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0) && event.key.code == sf::Keyboard::S) {
-                        std::ofstream aux(text.getString());
+                        std::ofstream aux("../lvls/"+text.getString());
                         if(aux.is_open()){
                             for(size_t i = 0; i < circles.size(); ++i){
                                 
