@@ -26,7 +26,7 @@ enum Pajarito {
 
 float dot(sf::Vector2f v1, sf::Vector2f v2);
 
-#define MAX_PAJA 64
+#define MAX_PAJA 128
 struct Pajaritos {
   int x[MAX_PAJA];
   int y[MAX_PAJA];
