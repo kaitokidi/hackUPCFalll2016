@@ -27,3 +27,6 @@
 *.exe
 *.out
 *.app
+src/executable
+src/text
+src/tmp
