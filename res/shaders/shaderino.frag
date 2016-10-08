@@ -21,9 +21,9 @@ void main()
             float cc = 0.5f + (0.5f) * nsin(time*8.0f);
             if (istouch)
             {
-            color[0] = 1.0f;
-            color[1] = 0.5f;
-            color[2] = 0.5f;
+                color[0] = 1.0f;
+                color[1] = 0.5f;
+                color[2] = 0.5f;
             }
             else
             {
