@@ -17,9 +17,12 @@ public:
 private:
     
     bool mousePressed; 
+    bool textActive;
 
     int uselessVariable;
-    
+
+    sf::Text text;
+    sf::Font font;
     sf::RenderWindow* window;
 
     std::vector<sf::CircleShape> circles;
