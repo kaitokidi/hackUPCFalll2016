@@ -2,6 +2,7 @@ uniform sampler2D texture;
 uniform vec2 pos;
 uniform float time;
 uniform bool istouch;
+uniform float fade;
 
 float nsin(float x)
 {
@@ -30,7 +31,7 @@ void main()
                 color[1] = 0.5f;
                 color[2] = 1.0f;
             }
-            color[3] = time/5.0f;
+            color[3] = fade;
         }
 
        // multiply it by the color

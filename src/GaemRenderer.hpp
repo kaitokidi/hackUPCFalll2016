@@ -43,6 +43,7 @@ static sf::Shader* txader = NULL;
       pajarito.setRotation(angle + 90);
         txader->setParameter("pos", circlePos);
         txader->setParameter("istouch", data->pajaritos.toqueteable[i]);
+        txader->setParameter("fade", data->fade);
       window->draw(pajarito, txader);
     }
   }
