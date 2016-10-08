@@ -5,12 +5,12 @@
 #include "Editor.hpp"
 
 int main(){
-  
+
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "./gaem", sf::Style::Close);
 
     while(window.isOpen()){
 
-        sf::Event event; 
+        sf::Event event;
         while(window.pollEvent(event)){
             switch (event.type){
                 case sf::Event::Closed:
@@ -28,8 +28,8 @@ int main(){
                 default:
                     break;
             }
-        }  
-        
+        }
+
         window.clear(sf::Color(255,251,239));
 
         window.display();
