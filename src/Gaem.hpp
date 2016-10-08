@@ -15,7 +15,7 @@
 #define RAIO_SPEED 300
 
 enum Pajarito {
-  bug,
+  simple = 0,
   feature,
   Pajarito_Qtty
 };
@@ -148,7 +148,6 @@ void UpdateRaio(GaemData* gd, int id, float dt) {
   float modul =  std::sqrt(v.x * v.x + v.y * v.y);
   sf::Vector2f vu = sf::Vector2f (v.x / modul, v.y / modul);
   sf::Vector2i dest = ini + sf::Vector2i(vu * r->timerms[id] * float(RAIO_SPEED));
-  // std::cout << "Soy el rayo " << id << " y estoy en " << dest.x << " " << dest.y << " " << r->timerms[id] << " " << dt << std::endl;
   // Mirar si golpea con un pajarito
   for (unsigned int i = 0; i <= ID__Pajarito; ++i) {
     if (i == r->pajaritoID[id]) continue;
@@ -162,11 +161,17 @@ void UpdateRaio(GaemData* gd, int id, float dt) {
 
       int idNewRaio = GaemData__GetNewIDRaio();
 
-      r->x[idNewRaio] = p->x[i];
-      r->y[idNewRaio] = p->y[i];
-      r->pajaritoID[idNewRaio] = i;
-      r->timerms[idNewRaio] = 0;
-      r->done[idNewRaio] = false;
+      switch (p->p[i]) {
+        case simple:
+        {
+          r->x[idNewRaio] = p->x[i];
+          r->y[idNewRaio] = p->y[i];
+          r->pajaritoID[idNewRaio] = i;
+          r->timerms[idNewRaio] = 0;
+          r->done[idNewRaio] = false;
+        } break;
+      }
+
     }
   }
   // Mirar si golepa con un raio
@@ -184,6 +189,7 @@ void UpdateRaio(GaemData* gd, int id, float dt) {
     float t = dot((q - p),s)/dot(r,s);
     float u = dot((q - p),r)/dot(r,s);
 
+    // Colisionan los segmentos
     if (dot(r,s) != 0 && t >= 0 && t <= 1 && u >= 0 && u <= 1) {
       GaemData__RestartLvl(gd);
       return;
