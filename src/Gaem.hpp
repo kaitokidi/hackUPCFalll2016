@@ -11,8 +11,8 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
-#define PAJARITO_RADIO 80
-#define RAIO_SPEED 50
+#define PAJARITO_RADIO 40
+#define RAIO_SPEED 100
 
 enum Pajarito {
   bug,
@@ -75,9 +75,12 @@ bool my_isint(std::string s)
 }
 
 int my_stoi(std::string s) {
+  //haber estudiado si pasas un nullptr, un string vacio, o un rico NULL;
   int x=0;
-  for (int i=0;i<int(s.size());i++)
+  bool negativo = s[0] == '-';
+  for (int i=negativo;i<int(s.size());i++)
     x=10*x+s[i]-'0';
+  if (negativo) x *= -1;
   return x;
 }
 
