@@ -190,7 +190,7 @@ void GaemLogic_updateGame(GaemData* gd, float dt_milis, sf::RenderWindow* target
       if (gd->pajaritos.active[i]) continue;
       int diffx = mousePosition.x - gd->pajaritos.x[i];
       int diffy = mousePosition.y - gd->pajaritos.y[i];
-      if (std::sqrt(diffx * diffx + diffy * diffy) < PAJARITO_RADIO) {
+      if (std::sqrt(diffx * diffx + diffy * diffy) < PAJARITO_RADIO && gd->pajaritos.toqueteable[i]) {
         std::cout << "Clicqued" << std::endl;
         gd->pajaritos.active[i] = true;
 
@@ -208,11 +208,13 @@ void GaemLogic_updateGame(GaemData* gd, float dt_milis, sf::RenderWindow* target
     }
   }
 
-  int totalDone = 0;
-  for (int i = 0; i <= int(ID__Raio); ++i) {
+  for (int i = 0; i <= int(ID__Raio ); ++i) {
     UpdateRaio(gd, i, dt_milis);
-    totalDone += gd->raios.done[i];
   }
-  if (totalDone == ID__Pajarito) loadLevel(gd, ++GaemData__currentLvl);
+  int totalDone = 0;
+  for (int i = 0; i <= int(ID__Pajarito); ++i) {
+    totalDone += gd->pajaritos.active[i];
+  }
+  if (totalDone == ID__Pajarito + 1) loadLevel(gd, ++GaemData__currentLvl);
 
 }
