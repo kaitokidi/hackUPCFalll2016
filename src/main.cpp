@@ -20,7 +20,7 @@ int main(){
   bool credits = p.display(&window, "../res/pngs/backgroundMENU.png");
   while (credits) {
     p.credits(&window, "../res/pngs/backgroundcreditz.png");
-    p.display(&window, "../res/pngs/backgroundMENU.png");
+    credits = p.display(&window, "../res/pngs/backgroundMENU.png");
   }
   
   GaemData* data;
