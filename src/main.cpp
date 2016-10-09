@@ -10,12 +10,19 @@
 #include "GaemRenderer.hpp"
 
 int main(){
+   /*     sf::ContextSettings settings;
+    settings.antialiasingLevel = 8;*/
+    
   sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "./gaem", sf::Style::Close);
   window.setFramerateLimit(60);
 
   Portada p;
-  p.display(&window, "../res/pngs/backgroundMENU.png");
-
+  bool credits = p.display(&window, "../res/pngs/backgroundMENU.png");
+  while (credits) {
+    p.credits(&window, "../res/pngs/backgroundcreditz.png");
+    p.display(&window, "../res/pngs/backgroundMENU.png");
+  }
+  
   GaemData* data;
   data = (GaemData*) malloc(sizeof(GaemData));
   memset(data, 0, sizeof(GaemData));
@@ -70,7 +77,7 @@ int main(){
 
     GaemLogic_updateGame(data, deltaTime, &window);
 
-    window.clear(sf::Color::Black);
+    window.clear(sf::Color(255,251,239));
     GaemRenderer__Render(data, &window);
     window.display();
   }

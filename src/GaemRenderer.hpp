@@ -25,6 +25,7 @@ static sf::Shader* txader = NULL;
     if (txader == NULL)
     {
         txader = new sf::Shader();
+        if(! blurrerino.loadFromFile("../res/shaders/blurrerino.frag", sf::Shader::Type::Fragment))std::cout << "failed loading blurrerino" << std::endl;
         txader->loadFromFile("../res/shaders/shaderino.frag", sf::Shader::Type::Fragment);
         clk.restart();
     }
@@ -84,12 +85,16 @@ static sf::Shader* txader = NULL;
     line[1].color = sf::Color::Yellow;
 
     //raios.draw(line, 2, sf::Lines);
-    
+   
+
+    float rectangleWidth = 6;
     float module = getModule(ini,dest);
-    sf::RectangleShape rline(sf::Vector2f(module, 5));
+    sf::RectangleShape rline(sf::Vector2f(module, rectangleWidth));
+    rline.setOrigin(0,rectangleWidth/2);
     float angle = getAngle(ini, dest);
     rline.setPosition(ini.x,ini.y);
     rline.rotate(angle);
+    rline.setFillColor(sf::Color(20,20,20));
     
     raios.draw(rline);
   }
@@ -99,11 +104,12 @@ static sf::Shader* txader = NULL;
   sf::Sprite raiosConjuntos;
   raiosConjuntos.setTexture(raios.getTexture());
 
-  window->draw(raiosConjuntos);
+  window->draw(raiosConjuntos, &blurrerino);
 
 
   // new Shit
 
+  /*spoiler*/
 }
 
 

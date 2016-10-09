@@ -132,9 +132,11 @@ sf::Vector2f getIncremento(GaemData* data, int id, float dt) {
   Pajaritos* p = &data->pajaritos;
   Raios* r = &data->raios;
   sf::Vector2i v(p->vx[r->pajaritoID[id]][r->nRaio[id]], p->vy[r->pajaritoID[id]][r->nRaio[id]]);
+
   float modul =  std::sqrt(v.x * v.x + v.y * v.y);
+  float raiomodul = 0;
   // return sf::Vector2f (v.x / modul, v.y / modul) * r->timerms[id] * float(RAIO_SPEED) + sf::Vector2f (v.x / modul, v.y / modul) * float(RAIO_SPEED)/2.f * float(sin(r->timerms[id]*10))/2.f;
-  return sf::Vector2f (v.x / modul, v.y / modul) * r->timerms[id] * float(RAIO_SPEED);
+  return sf::Vector2f (v.x / modul, v.y / modul) * r->timerms[id] * float(RAIO_SPEED) ;//+ sf::Vector2f(v.x / modul, v.y / modul)* r->timerms[id];
 }
 
 void UpdateRaio(GaemData* gd, int id, float dt) {

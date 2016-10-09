@@ -16,13 +16,16 @@ private:
     sf::Sprite play;
     sf::Texture rmrfTexture;
     sf::Sprite rmrf;
+    sf::Texture creditzText;
+    sf::Sprite creditz;
 
 
 public:
     Portada();
     ~Portada();
     void display(sf::RenderWindow* window);
-    void display(sf::RenderWindow* window, std::string pathImage);
+    bool display(sf::RenderWindow* window, std::string pathImage);
+    void credits(sf::RenderWindow* window, std::string pathImage);
 
 };
 

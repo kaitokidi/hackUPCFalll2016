@@ -29,14 +29,10 @@
  if you click C + U
      Undo command
      the last element added will be deleted.
-<<<<<<< HEAD
  
  if you click C + V
      toggle if the next item placed can be touched or not.
      
-=======
-
->>>>>>> 96239a542868136258499274dba2b666f0616f86
  if you are in type == 0
      you will draw basic pins.
      click the left mouse button on the place you want it to be placed.

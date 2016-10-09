@@ -16,20 +16,20 @@ void main()
         vec4 color = vec4(0.0,0.0,0.0,1.0);//gl_Color;
 
         float d = distance(gl_TexCoord[0].st, vec2(0.5f,0.5f));
-        if (d < 0.4f)
+        if (d < 0.9f)
         {
             float cc = 0.5f + (0.5f) * nsin(time*8.0f);
             if (istouch)
             {
-                color[0] = 1.0f;
-                color[1] = 0.5f;
-                color[2] = 0.5f;
+                color[0] = 0.7f;
+                color[1] = 0.7f;
+                color[2] = 0.7f;
             }
             else
             {
                 color[0] = 0.5f;
                 color[1] = 0.5f;
-                color[2] = 1.0f;
+                color[2] = 0.5f;
             }
             color[3] = fade;
         }

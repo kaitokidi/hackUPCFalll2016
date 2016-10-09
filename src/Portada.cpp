@@ -42,7 +42,7 @@ void Portada::display(sf::RenderWindow* window){
 
 }
 
-void Portada::display(sf::RenderWindow* window, std::string pathImage){
+bool Portada::display(sf::RenderWindow* window, std::string pathImage){
   open = true;
   t.loadFromFile(pathImage);
   s = sf::Sprite();
@@ -59,6 +59,11 @@ void Portada::display(sf::RenderWindow* window, std::string pathImage){
   rmrf.setTexture(rmrfTexture);
   rmrf.setOrigin(sf::Vector2f(rmrfTexture.getSize()/2u));
   rmrf.setPosition(window->getSize().x/2, window->getSize().y*3/4);
+  
+  creditzText.loadFromFile("../res/pngs/qm.png");
+  creditz.setTexture(creditzText);
+  creditz.setOrigin(sf::Vector2f(creditzText.getSize()/2u));
+  creditz.setPosition(window->getSize().x - creditzText.getSize().x, window->getSize().y - creditzText.getSize().y*1.5);
 
   while(open){
     sf::Event event;
@@ -75,6 +80,9 @@ void Portada::display(sf::RenderWindow* window, std::string pathImage){
             else if (play.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(*window)))) {
               GaemData__currentLvl = 1;
             }
+            else if (creditz.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(*window)))) {
+              return true;
+            }
           }
         } break;
         default:
@@ -86,7 +94,48 @@ void Portada::display(sf::RenderWindow* window, std::string pathImage){
     window->draw(s);
     window->draw(play);
     window->draw(rmrf);
+    window->draw(creditz);
     window->display();
   }
+    return false;
+}
 
+void Portada::credits(sf::RenderWindow* window, std::string pathImage){
+  open = true;
+  
+  t.loadFromFile(pathImage);
+  s = sf::Sprite();
+  s.setTexture(t);
+  s.scale(window->getSize().y/s.getGlobalBounds().height,window->getSize().y/s.getGlobalBounds().height);
+  s.setPosition(window->getSize().x/2 - s.getGlobalBounds().width/2, 0);
+
+  creditzText.loadFromFile("../res/pngs/back.png");
+  creditz.setTexture(creditzText);
+  creditz.setOrigin(sf::Vector2f(creditzText.getSize()/2u));
+  creditz.setPosition(window->getSize().x - creditzText.getSize().x, window->getSize().y - creditzText.getSize().y*1.5);
+
+  while(open){
+    sf::Event event;
+    while (window->pollEvent(event)) {
+      switch (event.type) {
+        case sf::Event::Closed:             window->close();                                               break;
+        case sf::Event::KeyPressed:         if (event.key.code == sf::Keyboard::Escape) window->close();   break;
+        case sf::Event::MouseButtonPressed:
+        {
+          if (event.mouseButton.button == sf::Mouse::Left) {
+            if (creditz.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(*window)))) {
+              return;
+            }
+          }
+        } break;
+        default:
+        break;
+      }
+    }
+
+    window->clear();
+    window->draw(s);
+    window->draw(creditz);
+    window->display();
+  }
 }
