@@ -184,7 +184,7 @@ void Editor::run(){
                     auto p1 = sf::Vector2f(circles[circles.size()-1].getPosition());
                     auto p2 = sf::Vector2f(mouse_x, mouse_y);
                     auto vector = sf::Vector2f(p2.x-p1.x, p2.y-p1.y);
-                    float module = std::sqrt(vector.x*vector.x + vector.y*vector.y);
+                    float module = std::hypot(vector.x, vector.y);
                     sf::Vector2f unitVector(vector.x/module, vector.y/module);
                     sf::Vector2f finalPoint(unitVector.x*82, unitVector.y*82);
                     auxCircle.setPosition(p1.x+finalPoint.x, p1.y+finalPoint.y);
@@ -203,7 +203,7 @@ void Editor::run(){
                 auto p1 = sf::Vector2f(circles[circles.size()-1].getPosition());
                 auto p2 = sf::Vector2f(mouse_x, mouse_y);
                 auto vector = sf::Vector2f(p2.x-p1.x, p2.y-p1.y);
-                float module = std::sqrt(vector.x*vector.x + vector.y*vector.y);
+                float module = std::hypot(vector.x, vector.y);
                 sf::Vector2f unitVector(vector.x/module, vector.y/module);
                 sf::Vector2f finalPoint(unitVector.x*82, unitVector.y*82);
                 auxCircle.setPosition(p1.x+finalPoint.x, p1.y+finalPoint.y);

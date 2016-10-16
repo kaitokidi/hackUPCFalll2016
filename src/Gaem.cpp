@@ -1,5 +1,6 @@
 #include "Gaem.hpp"
 #include <dirent.h>
+#include <cmath>
 
 int GaemData__currentLvl = 1;
 
@@ -37,16 +38,6 @@ bool my_isint(std::string s)
   return true;
 }
 
-int my_stoi(std::string s) {
-  //haber estudiado si pasas un nullptr, un string vacio, o un rico NULL;
-  int x=0;
-  bool negativo = s[0] == '-';
-  for (int i=negativo;i<int(s.size());i++)
-  x=10*x+s[i]-'0';
-  if (negativo) x *= -1;
-  return x;
-}
-
 void loadLevel(GaemData* gd, int nLvl) {
   GaemData_ResetIDPajarito();
   GaemData_ResetIDRaio();
@@ -61,7 +52,7 @@ void loadLevel(GaemData* gd, int nLvl) {
       path = ent->d_name;
       if (path.find("level") != std::string::npos) {
         path.erase(0, 5);
-        if (my_stoi(path) == nLvl) break;
+        if (std::stoi(path) == nLvl) break;
       }
     }
     closedir (dir);
@@ -101,22 +92,22 @@ void loadLevel(GaemData* gd, int nLvl) {
   }
   for (unsigned int i = 0; i < vs.size(); i += 6) {
     int nextPajarito = GaemData__GetNewIDPajarito();
-    gd->pajaritos.p[nextPajarito] = Pajarito(my_stoi(vs[i].second));
-    gd->pajaritos.x[nextPajarito]  = my_stoi(vs[i+1].second);
-    gd->pajaritos.y[nextPajarito]  = my_stoi(vs[i+2].second);
-    gd->pajaritos.vx[nextPajarito][0] = my_stoi(vs[i+3].second);
-    gd->pajaritos.vy[nextPajarito][0] = my_stoi(vs[i+4].second);
-    if (my_stoi(vs[i].second)>0) {
-      gd->pajaritos.vx[nextPajarito][1] = my_stoi(vs[i+5].second);
-      gd->pajaritos.vy[nextPajarito][1] = my_stoi(vs[i+6].second);
-      if (my_stoi(vs[i].second)>1) {
-        gd->pajaritos.vx[nextPajarito][2] = my_stoi(vs[i+7].second);
-        gd->pajaritos.vy[nextPajarito][2] = my_stoi(vs[i+8].second);
+    gd->pajaritos.p[nextPajarito] = Pajarito(std::stoi(vs[i].second));
+    gd->pajaritos.x[nextPajarito]  = std::stoi(vs[i+1].second);
+    gd->pajaritos.y[nextPajarito]  = std::stoi(vs[i+2].second);
+    gd->pajaritos.vx[nextPajarito][0] = std::stoi(vs[i+3].second);
+    gd->pajaritos.vy[nextPajarito][0] = std::stoi(vs[i+4].second);
+    if (std::stoi(vs[i].second)>0) {
+      gd->pajaritos.vx[nextPajarito][1] = std::stoi(vs[i+5].second);
+      gd->pajaritos.vy[nextPajarito][1] = std::stoi(vs[i+6].second);
+      if (std::stoi(vs[i].second)>1) {
+        gd->pajaritos.vx[nextPajarito][2] = std::stoi(vs[i+7].second);
+        gd->pajaritos.vy[nextPajarito][2] = std::stoi(vs[i+8].second);
         i += 2;
       }
       i += 2;
     }
-    gd->pajaritos.toqueteable[nextPajarito] = my_stoi(vs[i+5].second);
+    gd->pajaritos.toqueteable[nextPajarito] = std::stoi(vs[i+5].second);
   }
 }
 
@@ -133,7 +124,7 @@ sf::Vector2f getIncremento(GaemData* data, int id, float dt) {
   Raios* r = &data->raios;
   sf::Vector2i v(p->vx[r->pajaritoID[id]][r->nRaio[id]], p->vy[r->pajaritoID[id]][r->nRaio[id]]);
 
-  float modul =  std::sqrt(v.x * v.x + v.y * v.y);
+  float modul =  std::hypot(v.x, v.y);
   float raiomodul = 0;
   // return sf::Vector2f (v.x / modul, v.y / modul) * r->timerms[id] * float(RAIO_SPEED) + sf::Vector2f (v.x / modul, v.y / modul) * float(RAIO_SPEED)/2.f * float(sin(r->timerms[id]*10))/2.f;
   return sf::Vector2f (v.x / modul, v.y / modul) * r->timerms[id] * float(RAIO_SPEED) ;//+ sf::Vector2f(v.x / modul, v.y / modul)* r->timerms[id];
@@ -151,7 +142,7 @@ void UpdateRaio(GaemData* gd, int id, float dt) {
     if (i == r->pajaritoID[id]) continue;
     sf::Vector2i pajaritoPos(p->x[i], p->y[i]);
     sf::Vector2i v = dest - pajaritoPos;
-    float dist = std::sqrt(v.x * v.x + v.y * v.y);
+    float dist = std::hypot(v.x, v.y);
     if (dist < PAJARITO_RADIO) {
       r->done[id] = true;
       if (p->active[i]) continue;
@@ -212,7 +203,7 @@ void GaemLogic_updateGame(GaemData* gd, float dt_milis, sf::RenderWindow* target
       if (gd->pajaritos.active[i]) continue;
       int diffx = mousePosition.x - gd->pajaritos.x[i];
       int diffy = mousePosition.y - gd->pajaritos.y[i];
-      if (std::sqrt(diffx * diffx + diffy * diffy) < PAJARITO_RADIO && gd->pajaritos.toqueteable[i]) {
+      if (std::hypot(diffx, diffy) < PAJARITO_RADIO && gd->pajaritos.toqueteable[i]) {
         if (gd->clicked) continue;
         gd->clicked = true;
         std::cout << "Clicqued" << std::endl;
