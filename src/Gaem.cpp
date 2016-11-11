@@ -176,6 +176,7 @@ void UpdateRaio(GaemData* gd, int id, float dt) {
     if (dot(r,s) != 0 && t >= 0 && t <= 1 && u >= 0 && u <= 1) {
       gd->restarting = true;
       gd->fade = 1;
+      gd->raios.bad[id] = gd->raios.bad[i] = true;
       return;
     }
   }

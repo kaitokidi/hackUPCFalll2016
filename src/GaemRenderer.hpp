@@ -60,7 +60,7 @@ static sf::Shader* txader = NULL;
             float(data->pajaritos.x[0]) / window->getSize().x,
             float(data->pajaritos.y[0]) / window->getSize().y
             );
-    
+
 //    for (int i = 0; i < ID__Pajarito; ++i)
     {
    //     txader->setParameter("pos", pos);
@@ -85,7 +85,7 @@ static sf::Shader* txader = NULL;
     line[1].color = sf::Color::Yellow;
 
     //raios.draw(line, 2, sf::Lines);
-   
+
 
     float rectangleWidth = 6;
     float module = getModule(ini,dest);
@@ -94,8 +94,8 @@ static sf::Shader* txader = NULL;
     float angle = getAngle(ini, dest);
     rline.setPosition(ini.x,ini.y);
     rline.rotate(angle);
-    rline.setFillColor(sf::Color(20,20,20));
-    
+    rline.setFillColor(sf::Color(20+(data->raios.bad[i] *235),20,20));
+
     raios.draw(rline);
   }
   ///

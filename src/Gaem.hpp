@@ -47,10 +47,11 @@ void GaemData_ResetIDPajarito();
 
 #define MAX_RAIO 64
 struct Raios {
+  bool bad[MAX_RAIO];
+  bool done[MAX_RAIO];
   int x[MAX_RAIO];
   int y[MAX_RAIO];
   float timerms[MAX_RAIO];
-  bool done[MAX_RAIO];
   int pajaritoID[MAX_RAIO];
   int nRaio[MAX_RAIO];
 };
