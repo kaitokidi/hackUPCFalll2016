@@ -13,7 +13,7 @@ int main(){
    /*     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;*/
     
-  sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "./gaem", sf::Style::Close);
+  sf::RenderWindow window(sf::VideoMode::getFullscreenModes()[0], "./gaem");
   window.setFramerateLimit(60);
 
   Portada p;
